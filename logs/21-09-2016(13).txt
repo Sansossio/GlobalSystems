@@ -1,0 +1,2 @@
+Error: ER_DUP_ENTRY: Duplicate entry '868683023806437' for key 'idtracker'
+Error: ER_DUP_ENTRY: Duplicate entry '868683020723106' for key 'idtracker'

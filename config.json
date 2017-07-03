@@ -1,0 +1,74 @@
+{
+  "ip" : "149.56.106.166",
+  "EmailInterval" : 1233123123,
+  "RobotInterval" : 3,
+  "gps" : [
+      {
+        "Robot" : 30001,
+        "test" : 1234,
+        "TK" : 7777,
+        "meitrack" : 9407,
+        "QUECLINK" : 9091,
+        "SUNTECH" : 9070,
+        "S300" : 9300,
+        "H02" : 9890
+      }],
+  "mysql" : 
+    {
+      "host" : "localhost",
+      "user" : "root",
+      "pass" : "TPrehtQ8UPsR*",
+      "table" : "trackingpsdb"
+    }
+  ,
+  "commands" : 
+    {
+      "meitrack" : [{
+        "powerON" : "M,%1%,C01,0,02222*18\r\n",
+        "powerOFF" : "M,%1%,C01,0,12222*18\r\n",
+        "armON" : "M,%1%,C01,0,22122*18\r\n",
+        "armOFF" : "M,%1%,C01,0,22022*18\r\n"
+      }],
+      "QUECLINK": [{
+        "powerON" : "AT+GTOUT=gv300,0,%1%,,0,0,0,0,0,0,0,,,,,,,FFFF$",
+        "powerOFF" : "AT+GTOUT=gv300,1,%1%,,0,0,0,0,0,0,0,,,,,,,FFFF$"
+      }],
+      "SUNTECH": [{
+        "acc on" : "SA200CMD;%1%;02;Enable1\r",
+        "acc off" : "SA200CMD;%1%;02;Disable1\r"
+      }],
+      "S300": [{
+        "acc on" : "SA200CMD;%1%;02;Enable1\r",
+        "acc off" : "SA200CMD;%1%;02;Disable1\r"
+      }],
+      "H02": [{
+        "powerON" : "*TH,%1%,S20,0,0",
+        "powerOFF" : "*TH,%1%,S20,1,3,10,3,5,5,3,5,3,5,3,5",
+        "armON" : "*TH,%1%,SCF,0,0",
+        "armOFF" : "*TH,%1%,SCF,1,1"
+      }]
+    }
+  ,
+  "email" : {
+    "help me" : {
+      "suject" : "Alerta de S.O.S - Notificación",
+      "alert" : "Alerta de S.O.S",
+      "content" : "El veh&iacute;culo %placa% reporta <b>Alerta SOS / Bot&oacute;n de P&aacute;nico</b><br>El Bot&oacute;n de P&aacute;nico se a presionado.<br><br><b>Coordenadas:</b> %lat% , -%Long% <small><a href'https://www.google.com/maps/place/%lat%,-%Long%/@%lat%,-%Long%,18z'>Ver en GoogleMaps</a></small>"
+    },
+    "acc on" : {
+      "suject" : "Encendido de Motor - Notificación",
+      "alert" : "Encendido de Motor",
+      "content" : "El veh&iacute;culo %placa% reporta <b>Encendido del Motor</b><br><br>El veh&iacute;culo se encuentra encendido.<br><b>Coordenadas:</b> %lat% , -%Long% <small><a href'https://www.google.com/maps/place/%lat%,-%Long%/@%lat%,-%Long%,18z'>Ver en GoogleMaps</a></small>"
+    },
+    "low battery" : {
+      "suject" : "Batería Disminuyendo - Notificación",
+      "alert" : "Bater&iacute;a Disminuyendo",
+      "content" : "El veh&iacute;culo %placa% reporta <b>Disminuci&oacute;n de la Bater&iacute;a</b><br> La bater&iacute;a del dispositivo GPS se encuentra disminuyendo, se debe verificar la alimentaci&oacute;n del mismo.<br><br><b>Coordenadas:</b> %lat% , -%Long% <small><a href'https://www.google.com/maps/place/%lat%,-%Long%/@%lat%,-%Long%,18z'>Ver en GoogleMaps</a></small>"
+    },
+    "ac alarm" : {
+      "suject" : "Desconexión de Batería - Notificación",
+      "alert" : "Desconexi&oacute;n de Bater&iacute;a",
+      "content" : "El veh&iacute;culo %placa% reporta <b>Desconexi&oacute;n de la Bater&iacute;a del Veh&iacute;culo</b><br>Se ha desconectado los bornes del veh&iacute;culo, por favor verificar.<br><br><b>Coordenadas:</b> %lat% , -%Long% <small><a href'https://www.google.com/maps/place/%lat%,-%Long%/@%lat%,-%Long%,18z'>Ver en GoogleMaps</a></small>"
+    }
+  }
+}

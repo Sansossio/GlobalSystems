@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TrackinGPS ~ Online System</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<style>
+		header{
+			height: 80px;
+			line-height: 80px;
+			background-color: #063052;
+			color:white;
+			text-align: center;
+			font-size: 30px;
+		}
+		.content{
+			color: white;
+			height: 100%;
+			border-radius: 10px;
+			background-color: #0b5671;
+			margin-left: 4.53333%;
+			padding: 10px;
+		}
+		.content .title{
+			border-bottom: 1px solid white;
+			margin-bottom: 10px;
+		}
+		.content #logs{
+			overflow: auto;
+			height:300px;
+			display:none;
+		}
+		p{
+			display: inline-block;
+		}
+		.content #logs .gps{
+			color:black;
+			background-color: #D8D8D8;
+			width:100%;
+			margin-bottom: 5px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+		.content #errors{
+			overflow: auto;
+			height:300px;
+		}
+		.content #errors .gps{
+			color:black;
+			background-color: #D8D8D8;
+			width:100%;
+			margin-bottom: 5px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+		.content #test{
+			overflow: auto;
+			height: 300px;
+		}
+		.content #test .gps{
+			color:black;
+			background-color: #D8D8D8;
+			width:100%;
+			margin-bottom: 5px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+		.content #devices{
+			height: 300px;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+	</style>
+</head>
+<body>
+	<header>TrackinGPS ~ Puertos: TK->9492, Meitrack->9405, Suntech->9300, Queclink->9091</header>
+	<div class="container" style="margin-top:10px">
+		<div class="row">
+			
+			<div class="col-xs-3">
+			<!-- <div class="content" style="margin:5px 0 0 0;height:100%; background-color:transparent">
+				<button class="btn btn-danger" style="width:100%" onclick="stop()">Detener sistema</button>
+			</div> -->
+			<div class="content" style="margin:0;height:100%; background-color:transparent">
+				<button class="btn btn-info" style="width:100%" id="stop" onclick="stop('forever restart /globalsystem/index.js')">Reiniciar servicio</button>
+			</div>
+			<div class="content" style="margin:0;height:100%">
+
+				<div class="title">Estadisticas</div>
+				Uptime: <p id="uptime">00:00:00</p><br>
+				Online: <p id="online">0</p> device(s)<br>
+				Record: <p id="record">0</p> online(s)<br>
+				Emails: <p id="email">0</p> sends<br>
+				MySql: <p id="mysql">0</p> consults
+			</div>
+			<div class="content" style="margin:5px 0 0 0;height:100%">
+				<div class="title">Devices</div>
+				<div id="devices"></div>
+			</div>
+			</div>
+			<div class="col-xs-8 content">
+				<div class="title">Logs
+				<a style="float:right; color:white" href="javascript:clear(1);" >Limpiar</a>
+				</div>
+				<div id="errors">
+				</div>
+				<div class="title" style="display:none">Logs
+				<a style="float:right; color:white" href="javascript:clear(0);" onclick="clear(1)">Limpiar</a>
+				</div>
+				<div id="logs">
+				</div>
+				<div class="title">Test Data
+				<a style="float:right; color:white" href="javascript:clear(2);" onclick="clear(2)">Limpiar</a>
+				</div>
+				<div id="test">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	var logt = '<div class="gps"><b>Model</b>: %0%<br><b>IMEI</b>: %1%<br> <b>Other</b>: %2%<br> <b>Signal</b>: %3%<br><b>Course</b>: %5%<br><b>Speed</b>: %4%<br><b>Coords</b>: %6%, %7%<br><b>Fuel</b>: %9%<br><b>Door</b>: %10%<br><b>Altitude</b>: %8%<br><b>Date</b>: %11%';
+	
+		var socket = io.connect(window.location.href, { 'forceNew': true });
+		socket.on('gps', function(data) { 
+			
+			html = formatSocket(data,logt);
+			primary(html);
+		});
+		socket.on('online', function(data){
+			document.getElementById("uptime").innerHTML = time(formatSocket(data,"%1%"));
+			document.getElementById("mysql").innerHTML = new Intl.NumberFormat().format(formatSocket(data,"%2%"));
+			document.getElementById("email").innerHTML = new Intl.NumberFormat().format(formatSocket(data,"%3%"));
+			document.getElementById("online").innerHTML = new Intl.NumberFormat().format(formatSocket(data,"%0%"));
+			document.getElementById("record").innerHTML = new Intl.NumberFormat().format(formatSocket(data,"%4%"));
+		});
+		socket.on("devices", function(data){
+			var test = data.match(/\[(.*?)\]/g);
+			var html = "";
+			for(var i = 0; i < test.length; i++){
+				let rs = test[i].split(',');
+				if(rs[2].replace('[','').replace(']','') > 0)
+					html += "<b>IMEI</b>: " + rs[0].replace('[','').replace(']','') + "<br><b>Model</b>: " + rs[1].replace('[','').replace(']','') + "<br><b>Send</b>: " + rs[2].replace('[','').replace(']','') + "<hr>";
+			}
+			document.getElementById("devices").innerHTML = html;
+		});
+		socket.on("error", function(data){
+			primary("<div class='gps' style='color:red'><b>" + formatSocket(data,"%0%") + "</b></div>",1);
+		});
+		socket.on("green", function(data){
+			primary("<div class='gps' style='color:green'><b>" + formatSocket(data,"%0%") + "</b></div>",1);
+		});
+		socket.on("test", function(data){
+			primary("<div class='gps'><b>" + data + "</b></div>",2);
+		});
+		function stop(d){
+			socket.emit('devices', d);
+		}
+		socket.on("s", function(data){
+			console.log(data);
+			primary("<div class='gps'><b>" + data + "</b></div>",1);
+		});
+		function formatSocket(data,html){
+			var test = data.match(/\[(.*?)\]/g);
+			for(var i = 0; i < test.length; i++){
+				html = html.replace('%' + i + '%', test[i].replace('[',"").replace(']',''));
+			}
+			return html;
+		}
+		function time(se){
+			var totalSec = se;
+			var hours = parseInt( totalSec / 3600 ) % 24;
+			var minutes = parseInt( totalSec / 60 ) % 60;
+			var seconds = totalSec % 60;
+			return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+		}
+		var count = [0,0,0];
+		function primary(html, t = 0){
+
+			var logs;
+			switch(t){
+				case 1: logs = document.getElementById('errors'); break;
+				case 2: logs = document.getElementById('test'); break;
+				default: logs = document.getElementById('logs');
+			}
+			if(++count[t] > 200){
+				logs.innerHTML = "";
+				count[t] = 0;
+			}
+			logs.innerHTML = logs.innerHTML + html;
+			logs.scrollTop = logs.scrollHeight - logs.clientHeight;
+		}
+
+		function clear(t){
+			var cl;
+			switch(t){
+				case 0: cl = document.getElementById("logs"); break;
+				case 1: cl = document.getElementById("errors"); break;
+				case 2: cl = document.getElementById("test"); break;
+			}
+			cl.innerHTML = "";
+			count[t] = 0;
+		}
+		
+	</script>
+</body>
+</html>

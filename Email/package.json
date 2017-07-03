@@ -1,0 +1,16 @@
+{
+  "name": "globalsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julio Sansossio",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "nodemailer": "^2.6.0",
+    "path": "^0.12.7"
+  }
+}

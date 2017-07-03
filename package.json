@@ -1,0 +1,23 @@
+{
+  "name": "globalsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julio Sansossio",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "dateformat": "^1.0.12",
+    "email-validator": "^1.0.7",
+    "express": "^4.14.0",
+    "mysql": "^2.11.1",
+    "nodemailer": "^2.6.0",
+    "path": "^0.12.7",
+    "socket.io": "^1.4.8",
+    "system-sleep": "^1.0.0-f",
+    "waitfor": "^0.1.3"
+  }
+}

@@ -1,0 +1,5 @@
+-> Clase no encontrada : TK
+Error: ER_DUP_ENTRY: Duplicate entry '868683025202296' for key 'idtracker'
+Error: ER_DUP_ENTRY: Duplicate entry '868683025202296' for key 'idtracker'
+Error: ER_DUP_ENTRY: Duplicate entry '868683023419603' for key 'idtracker'
+Error: ER_DUP_ENTRY: Duplicate entry '359710046590437' for key 'idtracker'
