@@ -1,6 +1,6 @@
 {
   "ip" : "149.56.106.166",
-  "EmailInterval" : 1233123123,
+  "EmailInterval" : 10,
   "RobotInterval" : 3,
   "gps" : [
       {
@@ -17,8 +17,8 @@
     {
       "host" : "localhost",
       "user" : "root",
-      "pass" : "TPrehtQ8UPsR*",
-      "table" : "trackingpsdb"
+      "pass" : "pass",
+      "table" : "table"
     }
   ,
   "commands" : 
